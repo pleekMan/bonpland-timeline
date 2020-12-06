@@ -1,13 +1,17 @@
 console.log("--- CONTROLLER LOADED");
 
 var eventData = events;
-var timelineWidth = 600;
+var zoom = 1;
+var animSpeed = 500;
+var timelineWidthStart = $(window).width(); //3000;
+var timelineWidth = timelineWidthStart * zoom;
 
 setup();
 
-function setup(){
-	
-	$("#timelineContainer").css("width", timelineWidth+"px");
+function setup() {
+
+	$("#timelineContainer").css("width", timelineWidth + "px");
+	$("#timelineContainer").find("#timelineLine").css("width", timelineWidth + "px");
 
 	buildEvents(eventData);
 
@@ -21,18 +25,22 @@ function buildEvents(eventData) {
 
 	var newEvents = [];
 
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < eventData.length; i++) {
 
 		var newEvent = eventModelElement.clone();
 
 		newEvent.find(".ev-title").text(eventData[i].title);
 		newEvent.find(".ev-description").text(eventData[i].description);
 
-		var posInTimeline = timelineWidth * (eventData[i].dates.start / 100);
-		newEvent.css("left", posInTimeline + "px");
+		var posInTimeline = timelineWidth * eventData[i].dates.start;
+		setEventPosition(newEvent, posInTimeline);
 
-		var sizeInTimeline = timelineWidth * ((eventData[i].dates.end - eventData[i].dates.start) / 100);
-		newEvent.find(".ev-timeIndicator").css("width", sizeInTimeline+"px");
+		var sizeInTimeline = timelineWidth * (eventData[i].dates.end - eventData[i].dates.start);
+		setEventSize(newEvent, sizeInTimeline);
+
+		// SAVE DATES ON THE DOM (only once = original dates)
+		newEvent.attr("data-start", eventData[i].dates.start);
+		newEvent.attr("data-end", eventData[i].dates.end);
 
 		newEvents.push(newEvent[0]); // GET THE DOM OBJECT WRAPPED BY THE JQUERY OBJECT
 	}
@@ -45,4 +53,51 @@ function buildEvents(eventData) {
 	eventModelElement.remove();
 	// eventModelElement.css("display", "none");
 
+}
+
+function setEventPosition(event, pos) {
+	// event.css("left", pos + "px");
+
+	event.animate({
+		left: pos
+	}, animSpeed);
+}
+
+function setEventSize(event, siz) {
+	// event.find(".ev-rangeIndicator").css("width", siz + "px");
+
+	event.find(".ev-rangeIndicator").animate({
+		width: siz
+	}, animSpeed);
+}
+
+function zoomTo(zoomValue) {
+
+	
+	timelineWidth = timelineWidthStart * zoomValue;
+
+	// SET timelineLine width
+	$("#timelineContainer").find("#timelineLine").animate({
+		width: timelineWidth
+	}, animSpeed);
+
+	// EVENTS
+	var timeEvents = getTimeEventsFromDOM();
+
+	zoom = zoomValue;
+
+	$.each(timeEvents, function () {
+
+		var originalStart = $(this).attr("data-start");
+		var originalEnd = $(this).attr("data-end");
+
+		setEventPosition($(this), originalStart * timelineWidth);
+		setEventSize($(this), (originalEnd - originalStart) * timelineWidth);
+
+	});
+
+}
+
+function getTimeEventsFromDOM() {
+	return $("#timelineContainer").find(".timeEvent");
 }
