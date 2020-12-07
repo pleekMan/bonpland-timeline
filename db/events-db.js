@@ -3,7 +3,7 @@ var events = [
 		"title": "Event 0",
 		"dates": {
 			"start": 0.1,
-			"end": 0.2
+			"end": 0.1
 		},
 		"description": " Description 01",
 		"type": "type",
