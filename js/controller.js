@@ -1,14 +1,78 @@
+
+// START THE SERVER => RUN: python3 -m http.server (adding a number at the end selects the port (default: 8000) )
+
 console.log("--- CONTROLLER LOADED");
 
-var eventData = events;
+// const parseCsv = require('csv-parse/lib/sync.js');
+//const parseCsv = require('csv');
+
+//var eventData = events;
 var zoom = 1;
 var animSpeed = 500;
 var timelineWidthStart = $(window).width(); //3000;
 var timelineWidth = timelineWidthStart * zoom;
 
-setup();
+// setup();
 
-function setup() {
+// ENTRY POINT
+getDatabaseRaw()
+
+
+function getDatabaseRaw() {
+	var xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function () {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+
+			// IF db FOUND, GOTO setup();
+			setup(xhttp.responseText.trim());
+
+		} else {
+			console.log("--|| DATABASE NOT FOUND");
+		}
+	}
+
+	xhttp.open("GET", "../db/events-db.tsv", true);
+	xhttp.send();
+}
+
+function parseDB(database) {
+	
+	var jsonEvents = []; 
+	
+	var perLine = database.split('\n');
+
+	perLine.forEach(element => {
+		var eventFields = element.split('\t');
+		// console.log(perField);
+
+		var event = {
+			"id": eventFields[0],
+			"title": eventFields[0],
+			"dates": {
+				"start": eventFields[2],
+				"end": eventFields[3]
+			},
+			"description": eventFields[1],
+			"type": "type",
+			"tags": [
+				eventFields[5]
+			]
+		}
+
+		jsonEvents.push(event);
+
+	});
+
+	return jsonEvents;
+}
+
+function setup(rawDB) {
+
+	eventData = parseDB(rawDB);
+
+	console.log(eventData);
+
 
 	$("#timelineContainer").css("width", timelineWidth + "px");
 	$("#timelineContainer").find("#timelineLine").css("width", timelineWidth + "px");
@@ -25,7 +89,7 @@ function buildEvents(eventData) {
 
 	var newEvents = [];
 
-	for (let i = 0; i < eventData.length; i++) {
+	for (let i = 0; i < 1; i++) {
 
 		var newEvent = eventModelElement.clone();
 
@@ -37,9 +101,9 @@ function buildEvents(eventData) {
 		newEvent.attr("data-end", eventData[i].dates.end);
 
 		// POINT OR RANGE
-		if(eventData[i].dates.start == eventData[i].dates.end){
-			newEvent.find(".ev-rangeIndicator").css("display","none");
-			newEvent.find(".ev-timeIndicatorEnd").css("display","none");
+		if (eventData[i].dates.start == eventData[i].dates.end) {
+			newEvent.find(".ev-rangeIndicator").css("display", "none");
+			newEvent.find(".ev-timeIndicatorEnd").css("display", "none");
 		}
 
 		var posInTimeline = timelineWidth * getEventStartNormalized(newEvent);

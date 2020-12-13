@@ -1,0 +1,22 @@
+{
+  "name": "bonpland-timeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/controller.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pleekMan/bonpland-timeline.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pleekMan/bonpland-timeline/issues"
+  },
+  "homepage": "https://github.com/pleekMan/bonpland-timeline#readme",
+  "dependencies": {
+    "csv": "^5.3.2"
+  }
+}
