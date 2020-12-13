@@ -36,39 +36,9 @@ function getDatabaseRaw() {
 	xhttp.send();
 }
 
-function parseDB(database) {
-	
-	var jsonEvents = []; 
-	
-	var perLine = database.split('\n');
-
-	perLine.forEach(element => {
-		var eventFields = element.split('\t');
-		// console.log(perField);
-
-		var event = {
-			"id": eventFields[0],
-			"title": eventFields[0],
-			"dates": {
-				"start": eventFields[2],
-				"end": eventFields[3]
-			},
-			"description": eventFields[1],
-			"type": "type",
-			"tags": [
-				eventFields[5]
-			]
-		}
-
-		jsonEvents.push(event);
-
-	});
-
-	return jsonEvents;
-}
-
 function setup(rawDB) {
 
+	// at jsonFormatter.js
 	eventData = parseDB(rawDB);
 
 	console.log(eventData);
