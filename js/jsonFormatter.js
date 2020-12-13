@@ -31,7 +31,7 @@ function parseDB(database) {
 			endDate = startDate;
 		}
 
-		// DATE SETUP - BEGIN
+		// DATE SETUP - END
 
 		var event = {
 			"id": eventFields[0],
@@ -74,7 +74,7 @@ function formatDate(dateIn) {
 	}
 	finalDate.push(fields[2]);
 
-	console.log(finalDate[2] + "-" + finalDate[1] + "-" + finalDate[0]);
+	//console.log(finalDate[2] + "-" + finalDate[1] + "-" + finalDate[0]);
 
 	return finalDate;//[2] + "-" + finalDate[1] + "-" + finalDate[0];
 }

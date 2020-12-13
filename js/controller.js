@@ -11,6 +11,8 @@ var zoom = 1;
 var animSpeed = 500;
 var timelineWidthStart = $(window).width(); //3000;
 var timelineWidth = timelineWidthStart * zoom;
+var minTime = 0;
+var maxTime = 0;
 
 // setup();
 
@@ -56,10 +58,13 @@ function buildEvents(eventData) {
 
 	// GETTING MODEL HTML-DOM FOR AN EVENT
 	var eventModelElement = $("#timelineContainer").children(".timeEvent").first();
+	var newEvents = []; 	// JQUERY OBJECT
 
-	var newEvents = [];
+	// CALCULATE MIN+MAX ABSOLUTE TIME
+	calculateMinMaxTime(eventData);
 
-	for (let i = 0; i < 1; i++) {
+
+	for (let i = 0; i < eventData.length; i++) {
 
 		var newEvent = eventModelElement.clone();
 
@@ -146,10 +151,33 @@ function getTimeEventsFromDOM() {
 	return $("#timelineContainer").find(".timeEvent");
 }
 
+function calculateMinMaxTime(events){
+
+	minTime = events[0].dates.start;
+	maxTime = events[0].dates.end;
+
+	for (let i = 1; i < events.length; i++) {
+		const event = events[i];
+
+		minTime = event.dates.start <= minTime ? event.dates.start : minTime
+		maxTime = event.dates.end >= maxTime ? event.dates.end : maxTime;
+		
+	}
+
+	console.log("MinTime: " + minTime);
+	console.log("MaxTime: " + maxTime);
+
+}
+
 function getEventStartNormalized(event) {
-	return event.attr("data-start");
+
+	return map(event.attr("data-start"), minTime, maxTime, 0, 1);
 }
 
 function getEventEndNormalized(event) {
-	return event.attr("data-end");
+	return map(event.attr("data-end"), minTime, maxTime, 0, 1);
 }
+
+function map (value, in_min, in_max, out_min, out_max) {
+	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+ }
