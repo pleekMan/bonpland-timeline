@@ -19,14 +19,14 @@ function parseDB(database) {
 		startDate.setMonth(startDateFormatted[1]);
 		startDate.setDate(startDateFormatted[0]);
 		startDate.setTime
-		console.log(startDate);
+		// console.log(startDate);
 
 		if (eventFields[3] != "") {
 			var endDateFormatted = formatDate(eventFields[3]);
-			endDate.setFullYear(startDateFormatted[2]);
-			endDate.setMonth(startDateFormatted[1]);
-			endDate.setDate(startDateFormatted[0]);
-			console.log(endDate);
+			endDate.setFullYear(endDateFormatted[2]);
+			endDate.setMonth(endDateFormatted[1]);
+			endDate.setDate(endDateFormatted[0]);
+			// console.log(endDate);
 		} else {
 			endDate = startDate;
 		}
@@ -58,7 +58,7 @@ function parseDB(database) {
 
 function formatDate(dateIn) {
 	// expected input format => "d-m-yyyy" (Jan = 1)
-	// WHERE "0" IN DATABASE MEANS NO VALUES. THIS, WE CONVERT TO 1st DAY OR 1sr MONTH
+	// WHERE "0" IN DATABASE MEANS NO VALUES. THIS, WE CONVERT TO 1st DAY OR 1st MONTH
 
 	var finalDate = [];
 
@@ -67,7 +67,7 @@ function formatDate(dateIn) {
 	finalDate.push(fields[0] == "0" ? "1" : fields[0]); // DAY
 
 	if (fields[1] != "0") {
-		// MONTHS (JANUARY = 0 for Date Objects
+		// MONTHS (JANUARY = 0 for Date Objects)
 		finalDate.push((parseInt(fields[1]) - 1) + "");
 	} else {
 		finalDate.push("0");

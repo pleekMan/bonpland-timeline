@@ -23,15 +23,35 @@ a {
 	position: relative;
 	/* IL FAUT TOUJOURS AVOIR UNE position ICI, CAR timeEvent IS ABSOLUTE IF PARENTS HAS relative/absolute*/
 	height: 100%;
-	margin: 0;
+	/* margin: 20px; */
 	padding: 0;
 }
 
 #timelineLine {
 	display: block;
+	position: relative;
 	width: 600px;
 	border: 1px solid rgb(90, 154, 69);
 	border-width: 3px 0 0 0;
+
+	/* JQUERY SETS OVERFLOW TO HIDDEN WHEN ANIMATING, WHICH MESSES UP THE DISPLAY OF THE fixedDateMarkers */
+	overflow: visible !important; 
+}
+
+.timeLineFixedDate{
+	border: 1px solid pink;
+	border-width: 0 0 0 2px;
+	height: 10px;
+
+	position: absolute;
+	bottom: 0px;
+
+	left: 50px;
+}
+
+.fixedDateNumber{
+	color: white;
+	transform: translateY(-20px) translateX(-20px);
 }
 
 .timeEvent {
@@ -82,7 +102,7 @@ a {
 .ev-content {}
 
 .ev-title {
-	font-size: 20px;
+	font-size: 10px;
 	line-height: 25px;
 	color: coral;
 }

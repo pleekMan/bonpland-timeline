@@ -21,13 +21,18 @@ getDatabaseRaw()
 
 
 function getDatabaseRaw() {
+
 	var xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function () {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 
 			// IF db FOUND, GOTO setup();
-			setup(xhttp.responseText.trim());
+			// at jsonFormatter.js
+			eventData = parseDB(xhttp.responseText.trim()); // EVENT DATA IS GLOBAL
+			//console.log(eventData);
+
+			setup(eventData);
 
 		} else {
 			console.log("--|| DATABASE NOT FOUND");
@@ -38,18 +43,16 @@ function getDatabaseRaw() {
 	xhttp.send();
 }
 
-function setup(rawDB) {
+function setup() {
 
-	// at jsonFormatter.js
-	eventData = parseDB(rawDB);
-
-	console.log(eventData);
 
 
 	$("#timelineContainer").css("width", timelineWidth + "px");
 	$("#timelineContainer").find("#timelineLine").css("width", timelineWidth + "px");
 
-	buildEvents(eventData);
+	buildEvents(eventData); // EVENT DATA IS GLOBAL
+
+	buildTimelineFixedMarkers();
 
 }
 
@@ -68,10 +71,12 @@ function buildEvents(eventData) {
 
 		var newEvent = eventModelElement.clone();
 
-		newEvent.find(".ev-title").text(eventData[i].title);
-		newEvent.find(".ev-description").text(eventData[i].description);
+		// newEvent.find(".ev-title").text(eventData[i].title);
+		newEvent.find(".ev-title").text(new Date(eventData[i].dates.start).getFullYear());
+		//newEvent.find(".ev-description").text(eventData[i].description);
+		newEvent.find(".ev-description").text("Ev:" + i);
 
-		// SAVE DATES ON THE DOM (only once = original dates)
+		// SAVE DATES ON THE DOM (only once, as original absolute time)
 		newEvent.attr("data-start", eventData[i].dates.start);
 		newEvent.attr("data-end", eventData[i].dates.end);
 
@@ -90,13 +95,82 @@ function buildEvents(eventData) {
 		newEvents.push(newEvent[0]); // GET THE DOM OBJECT WRAPPED BY THE JQUERY OBJECT
 	}
 
-	console.log(newEvents);
+	// console.log(newEvents);
 
 	$("#timelineContainer").append(newEvents);
 
 	// REMOVE MODEL
 	eventModelElement.remove();
 	// eventModelElement.css("display", "none");
+
+}
+
+function updateTimelineFixedMarkers() {
+
+	$("#timelineLine").children().fadeOut(animSpeed * 0.5, function () {
+		$(this).remove();
+	});
+
+	buildTimelineFixedMarkers();
+
+}
+
+function buildTimelineFixedMarkers() {
+
+	var minYear = new Date(minTime).getFullYear();
+	var maxYear = new Date(maxTime).getFullYear();
+
+	console.log("Min Year: " + minYear);
+	console.log("Max Year: " + maxYear);
+
+	var totalYears = maxYear - minYear;
+	var jumpUnit = 0;
+
+	if (totalYears <= 1) {
+		jumpUnit = 1.0 / 12; // months
+	} else if (totalYears <= 5) {
+		jumpUnit = 1;
+	} else if (totalYears <= 50) {
+		jumpUnit = 5;
+	} else if (totalYears <= 100) {
+		jumpUnit = 20;
+	} else if (totalYears <= 1000) {
+		jumpUnit = 100;
+	} else {
+		jumpUnit = 1000;
+	}
+
+	jumpUnit = Math.trunc(jumpUnit / zoom);
+
+	var startAt = (minYear + jumpUnit);
+	startAt -= (startAt % jumpUnit);
+	var finishAt = maxYear - (maxYear % jumpUnit);
+
+	var howMany = (Math.trunc((finishAt - startAt) / jumpUnit)) + 1;
+
+	// var displayWidthUnit = timelineWidth / howMany;
+
+	for (let i = 0; i < howMany; i++) {
+
+		var date = startAt + (jumpUnit * i);
+		var pos = map(date, minYear, maxYear, 0, timelineWidth);
+
+		var dateMarker = $('<div/>', {
+			class: "timeLineFixedDate",
+			css: {
+				left: pos,
+				display: "none"
+			}
+		});
+
+		dateMarker.append('<div class="fixedDateNumber">' + date + '</div>');
+		dateMarker.appendTo('#timelineLine');
+
+		dateMarker.fadeIn(animSpeed);
+	}
+
+
+
 
 }
 
@@ -145,13 +219,16 @@ function zoomTo(zoomValue) {
 
 	});
 
+	// UPDATE FIXED TIME MARKERS
+	updateTimelineFixedMarkers();
+
 }
 
 function getTimeEventsFromDOM() {
 	return $("#timelineContainer").find(".timeEvent");
 }
 
-function calculateMinMaxTime(events){
+function calculateMinMaxTime(events) {
 
 	minTime = events[0].dates.start;
 	maxTime = events[0].dates.end;
@@ -161,7 +238,7 @@ function calculateMinMaxTime(events){
 
 		minTime = event.dates.start <= minTime ? event.dates.start : minTime
 		maxTime = event.dates.end >= maxTime ? event.dates.end : maxTime;
-		
+
 	}
 
 	console.log("MinTime: " + minTime);
@@ -178,6 +255,6 @@ function getEventEndNormalized(event) {
 	return map(event.attr("data-end"), minTime, maxTime, 0, 1);
 }
 
-function map (value, in_min, in_max, out_min, out_max) {
+function map(value, in_min, in_max, out_min, out_max) {
 	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
- }
+}
