@@ -1,9 +1,34 @@
+@font-face {
+	font-family: "cormorant";
+	src: url("/resources/Cormorant-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "cormorant-italic";
+	src: url("/resources/Cormorant-MediumItalic.ttf") format("truetype");
+	font-weight: normal;
+	font-style: italic;
+}
+
 :root {
 	font-size: 17px;
+	font-family: "cormorant";
+	--colorBrownStrong: rgb(130, 79, 75);
+	--colorBrownLight: rgb(175, 100, 92);
+	--colorBlueStrong: rgb(51, 54, 106);
+	--colorBlueLight: rgb(84, 100, 154);
+	--colorGreenStrong: rgb(142, 185, 185);
+	--colorGreenLight: rgb(193, 211, 209);
+	--colorBlack: rgb(40, 40, 40);
+	--colorGray: rgb(77, 77, 77);
+	--colorLight: rgb(239, 225, 216);
 }
 
 body {
-	background-color: rgb(79, 78, 78);
+	background-color: var(--colorLight);
+	font-family: "cormorant";
 }
 
 a {
@@ -15,7 +40,7 @@ a {
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	padding: 0;
+	padding: 20px;
 }
 
 #timelineContainer {
@@ -31,27 +56,35 @@ a {
 	display: block;
 	position: relative;
 	width: 600px;
-	border: 1px solid rgb(90, 154, 69);
-	border-width: 3px 0 0 0;
-
+	border: 1px solid var(--colorBlueStrong);
+	border-width: 1px 0 0 0;
 	/* JQUERY SETS OVERFLOW TO HIDDEN WHEN ANIMATING, WHICH MESSES UP THE DISPLAY OF THE fixedDateMarkers */
-	overflow: visible !important; 
+	overflow: visible !important;
 }
 
-.timeLineFixedDate{
-	border: 1px solid pink;
-	border-width: 0 0 0 2px;
-	height: 10px;
-
+.timeLineFixedDate {
+	border: 1px solid var(--colorBlueStrong);
+	border-width: 0 0 0 3px;
+	height: 5px;
 	position: absolute;
 	bottom: 0px;
-
-	left: 50px;
+	/* left: 50px; */
 }
 
-.fixedDateNumber{
-	color: white;
-	transform: translateY(-20px) translateX(-20px);
+.fixedDateNumber {
+	font-family: "cormorant-italic";
+	color: var(--colorBlueLight);
+	font-size: 20px;
+	transform: translateY(-25px) translateX(-15px);
+}
+
+.fixedDateSeparator {
+	border: 1px dotted var(--colorBlueStrong);
+	border-width: 0 0 0 1px;
+	height: 300px;
+	margin: 0;
+	padding: 0;
+	transform: translateY(-25px) translateX(-2px);
 }
 
 .timeEvent {
@@ -74,24 +107,23 @@ a {
 	height: 20px;
 	top: -10px;
 	/* =  .timeEvent:top*/
-	border: 0 solid rgb(215, 50, 50);
-	border-width: 0 0 0 2px;
+	border: 0 solid var(--colorGray);
+	border-width: 0 0 0 1px;
 }
 
-.ev-timeIndicatorStart{
-}
+.ev-timeIndicatorStart {}
 
-.ev-timeIndicatorEnd{
-}
+.ev-timeIndicatorEnd {}
 
 .ev-timeIndicatorPin {
-	width: 10px;
-	height: 10px;
-	background-color: darksalmon;
-	border-radius: 5px;
+	width: 5px;
+	height: 5px;
+	background-color: var(--colorBrownLight);
+	/* border-radius: 14px; */
 	position: absolute;
-	left: -6px;
-	top: -4px;
+	left: -3px;
+	top: -5px;
+	transform: rotate(45deg);
 }
 
 .ev-rangeIndicator {
@@ -108,30 +140,29 @@ a {
 }
 
 .ev-description {
-	color: coral;
+	color: var(--colorGray);
+	width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
 }
-
 
 #displayContainer {
 	position: fixed;
 	bottom: 0;
-	left:0;
+	left: 0;
 	width: 100%;
-	height: 25%; /* Set the fixed height of the footer here */
+	height: 25%;
+	/* Set the fixed height of the footer here */
 	/* line-height: 60px; */
-
 	color: white;
 	background-color: #242424;
 	border: 1px solid lightskyblue;
- }
+}
 
- .displayRight{
+.displayRight {
 	background-color: darkgoldenrod;
- }
+}
 
- .displayLeft{
+.displayLeft {
 	background-color: lightslategrey;
- }
-
-
- 
+}

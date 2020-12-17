@@ -73,8 +73,8 @@ function buildEvents(eventData) {
 
 		// newEvent.find(".ev-title").text(eventData[i].title);
 		newEvent.find(".ev-title").text(new Date(eventData[i].dates.start).getFullYear());
-		//newEvent.find(".ev-description").text(eventData[i].description);
-		newEvent.find(".ev-description").text("Ev:" + i);
+		newEvent.find(".ev-description").text(eventData[i].description);
+		// newEvent.find(".ev-description").text("Ev:" + i);
 
 		// SAVE DATES ON THE DOM (only once, as original absolute time)
 		newEvent.attr("data-start", eventData[i].dates.start);
@@ -107,6 +107,7 @@ function buildEvents(eventData) {
 
 function updateTimelineFixedMarkers() {
 
+	// REMOVE CURRENT MARKERS
 	$("#timelineLine").children().fadeOut(animSpeed * 0.5, function () {
 		$(this).remove();
 	});
@@ -164,6 +165,8 @@ function buildTimelineFixedMarkers() {
 		});
 
 		dateMarker.append('<div class="fixedDateNumber">' + date + '</div>');
+		dateMarker.append('<div class="fixedDateSeparator"></div>');
+
 		dateMarker.appendTo('#timelineLine');
 
 		dateMarker.fadeIn(animSpeed);
