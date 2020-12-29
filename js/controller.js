@@ -199,6 +199,9 @@ function setEventSize(event, siz) {
 
 function zoomTo(zoomValue) {
 
+	// FOR KEEPING THE TIME HEAD CENTERED IN THE WINDOW WHILE ZOOMING
+	var currentScrollPosNorm = (getScrollY() + ($(window).width() * 0.5) ) / timelineWidth;
+	
 
 	timelineWidth = timelineWidthStart * zoomValue;
 
@@ -225,6 +228,27 @@ function zoomTo(zoomValue) {
 	// UPDATE FIXED TIME MARKERS
 	updateTimelineFixedMarkers();
 
+	// NEW SCROLL POSITION IN NEW TIMELINE WIDTH
+	var newScrollPos = (currentScrollPosNorm * timelineWidth) - ($(window).width() * 0.5);
+	scrollToLeft(newScrollPos);
+
+}
+
+function scrollToLeft(pos) {
+	$("html,body").animate({ scrollLeft: pos }, animSpeed);
+}
+
+
+function getScrollY(){
+	return $("html").scrollLeft();
+}
+
+function moveScrollAbs(absValue){
+	scrollToLeft(absValue);
+}
+
+function moveScrollRel(relValue){
+	scrollToLeft($("html").scrollLeft() + relValue);
 }
 
 function getTimeEventsFromDOM() {
