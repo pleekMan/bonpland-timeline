@@ -29,10 +29,17 @@ function getDatabaseRaw() {
 
 			// IF db FOUND, GOTO setup();
 			// at jsonFormatter.js
-			eventData = parseDB(xhttp.responseText.trim()); // EVENT DATA IS GLOBAL
+			var eventsFromDB = parseDB(xhttp.responseText.trim()); // EVENT DATA IS GLOBAL
+
+			var eventsOrdered = quickSort(eventsFromDB);
+			for (let i = 0; i < eventsOrdered.length; i++) {
+				console.log(eventsOrdered[i].dates.start);
+			}
+
+
 			//console.log(eventData);
 
-			setup(eventData);
+			setup(eventsOrdered);
 
 		} else {
 			console.log("--|| DATABASE NOT FOUND");
@@ -43,7 +50,7 @@ function getDatabaseRaw() {
 	xhttp.send();
 }
 
-function setup() {
+function setup(eventData) {
 
 
 
@@ -64,7 +71,7 @@ function buildEvents(eventData) {
 	var newEvents = []; 	// JQUERY OBJECT
 
 	// CALCULATE MIN+MAX ABSOLUTE TIME
-	calculateMinMaxTime(eventData);
+	calculateMinMaxTime(eventData); // !!! NOT NEEDED IF DOING THE QUICKSORT. REMOVE LATER.
 
 
 	for (let i = 0; i < eventData.length; i++) {
@@ -200,8 +207,8 @@ function setEventSize(event, siz) {
 function zoomTo(zoomValue) {
 
 	// FOR KEEPING THE TIME HEAD CENTERED IN THE WINDOW WHILE ZOOMING
-	var currentScrollPosNorm = (getScrollY() + ($(window).width() * 0.5) ) / timelineWidth;
-	
+	var currentScrollPosNorm = (getScrollY() + ($(window).width() * 0.5)) / timelineWidth;
+
 
 	timelineWidth = timelineWidthStart * zoomValue;
 
@@ -239,15 +246,15 @@ function scrollToLeft(pos) {
 }
 
 
-function getScrollY(){
+function getScrollY() {
 	return $("html").scrollLeft();
 }
 
-function moveScrollAbs(absValue){
+function moveScrollAbs(absValue) {
 	scrollToLeft(absValue);
 }
 
-function moveScrollRel(relValue){
+function moveScrollRel(relValue) {
 	scrollToLeft($("html").scrollLeft() + relValue);
 }
 
@@ -284,4 +291,23 @@ function getEventEndNormalized(event) {
 
 function map(value, in_min, in_max, out_min, out_max) {
 	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+function quickSort(eventArray) {
+	// MODIFIED FROM https://github.com/rajatk16/javascript-sort
+	if (eventArray.length < 2) {
+		return eventArray
+	}
+	const chosenIndex = eventArray.length - 1
+	const chosen = eventArray[chosenIndex];
+	const a = [];
+	const b = [];
+	for (let i = 0; i < chosenIndex; i++) {
+		const temp = eventArray[i];
+		temp.dates.start < chosen.dates.start ? a.push(temp) : b.push(temp);
+	}
+
+	const output = [...quickSort(a), chosen, ...quickSort(b)];
+	//console.log(output.join(' '));
+	return output
 }
