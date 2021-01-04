@@ -93,8 +93,11 @@ a {
 	/* border-width: 0 0 0 3px; */
 	/* height: 5px; */
 	position: absolute;
-	bottom: 5px;
+	bottom: -2px;
 	color: var(--colorGreenStrong);
+	/* background-color: var(--colorLight); */
+	font-size: 23px;
+	z-index: 1;
 }
 
 .timeEvent {
@@ -140,8 +143,9 @@ a {
 	transform: rotate(45deg);
 }
 
-.ev-pinSelected{
+.ev-pinSelected {
 	background-color: var(--colorGreenStrong);
+	border: 1px solid var(--colorGreenStrong);
 }
 
 .ev-rangeIndicator {
@@ -151,17 +155,27 @@ a {
 
 .ev-content {}
 
-.ev-title {
-	font-size: 10px;
-	line-height: 25px;
-	color: coral;
-}
+/* .ev-title {
+	color: var(--colorGray);
+	width: 150px;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 3px 0 3px;
+} */
 
 .ev-description {
 	color: var(--colorGray);
 	width: 150px;
 	white-space: nowrap;
 	overflow: hidden;
+	padding: 0 3px 0 3px;
+}
+
+.ev-description:hover {
+	overflow: visible;
+	width: auto;
+	background-color: var(--colorGreenLight);
+	cursor: pointer;
 }
 
 #displayContainer {

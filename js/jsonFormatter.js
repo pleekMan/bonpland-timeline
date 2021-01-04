@@ -21,6 +21,7 @@ function parseDB(database) {
 		startDate.setTime
 		// console.log(startDate);
 
+		// IF IT HAS AN END DATE
 		if (eventFields[3] != "") {
 			var endDateFormatted = formatDate(eventFields[3]);
 			endDate.setFullYear(endDateFormatted[2]);

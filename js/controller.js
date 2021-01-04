@@ -34,8 +34,6 @@ function getDatabaseRaw() {
 			for (let i = 0; i < eventData.length; i++) {
 				console.log(eventData[i].dates.start);
 			}
-
-
 			//console.log(eventData);
 
 			setup(eventData);
@@ -68,24 +66,28 @@ function setup(eventData) {
 		// $(this).find(".ev-description").html();
 		$("#selectedDateMarker").css("display","block");
 
-		let eventObj = $(this).parent().parent().parent()
-		let newLeft = parseFloat(eventObj.css("left")) - 18;
+		let eventObj = $(this).parent().parent()
+		let newLeft = parseFloat(eventObj.css("left")) - 25;
 		$("#selectedDateMarker").css("left",newLeft);
 
 		var dateValue = new Date(parseInt(eventObj.attr("data-start")));
-		$("#selectedDateMarker").html(dateValue.getFullYear());
+		$("#selectedDateMarker").html((dateValue.getMonth() + 1) + "/" + dateValue.getFullYear());
 		// console.log(dateValue);
 
 		eventObj.find(".ev-timeIndicatorPin").addClass("ev-pinSelected");
-		eventObj.find(".ev-description").css("overflow", "visible");
+		eventObj.find(".ev-timeIndicator").addClass("ev-pinSelected");
+
+		// eventObj.find(".ev-description").css("overflow", "visible");
 
 	});
 
 	$(".ev-content").mouseleave(function(){
-		let eventObj = $(this).parent().parent().parent()
+		let eventObj = $(this).parent().parent()
 		$("#selectedDateMarker").css("display","none");
 		eventObj.find(".ev-timeIndicatorPin").removeClass("ev-pinSelected");
-		eventObj.find(".ev-description").css("overflow", "hidden");
+		eventObj.find(".ev-timeIndicator").removeClass("ev-pinSelected");
+
+		// eventObj.find(".ev-description").css("overflow", "hidden");
 
 	});
 
@@ -183,7 +185,7 @@ function repositionEventsVertically() {
 		}, animSpeed);
 		
 		evs.eq(i).find(".ev-timeIndicatorStart").delay(500).animate({
-			height: savedTops[i] + 30
+			height: savedTops[i] + 35
 		}, animSpeed);
 	}
 
