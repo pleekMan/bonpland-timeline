@@ -74,14 +74,18 @@ function setup(eventData) {
 
 		var dateValue = new Date(parseInt(eventObj.attr("data-start")));
 		$("#selectedDateMarker").html(dateValue.getFullYear());
+		// console.log(dateValue);
 
 		eventObj.find(".ev-timeIndicatorPin").addClass("ev-pinSelected");
+		eventObj.find(".ev-description").css("overflow", "visible");
+
 	});
 
 	$(".ev-content").mouseleave(function(){
 		let eventObj = $(this).parent().parent().parent()
 		$("#selectedDateMarker").css("display","none");
 		eventObj.find(".ev-timeIndicatorPin").removeClass("ev-pinSelected");
+		eventObj.find(".ev-description").css("overflow", "hidden");
 
 	});
 
