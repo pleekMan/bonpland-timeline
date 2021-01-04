@@ -6,15 +6,14 @@ console.log("--- CONTROLLER LOADED");
 // const parseCsv = require('csv-parse/lib/sync.js');
 //const parseCsv = require('csv');
 
-//var eventData = events;
+var eventData;
+
 var zoom = 1;
 var animSpeed = 500;
 var timelineWidthStart = $(window).width(); //3000;
 var timelineWidth = timelineWidthStart * zoom;
 var minTime = 0;
 var maxTime = 0;
-
-// setup();
 
 // ENTRY POINT
 getDatabaseRaw()
@@ -31,15 +30,15 @@ function getDatabaseRaw() {
 			// at jsonFormatter.js
 			var eventsFromDB = parseDB(xhttp.responseText.trim()); // EVENT DATA IS GLOBAL
 
-			var eventsOrdered = quickSort(eventsFromDB);
-			for (let i = 0; i < eventsOrdered.length; i++) {
-				console.log(eventsOrdered[i].dates.start);
+			eventData = quickSort(eventsFromDB);
+			for (let i = 0; i < eventData.length; i++) {
+				console.log(eventData[i].dates.start);
 			}
 
 
 			//console.log(eventData);
 
-			setup(eventsOrdered);
+			setup(eventData);
 
 		} else {
 			console.log("--|| DATABASE NOT FOUND");
@@ -60,6 +59,33 @@ function setup(eventData) {
 	buildEvents(eventData); // EVENT DATA IS GLOBAL
 
 	buildTimelineFixedMarkers();
+
+	$("#selectedDateMarker").css("display","none");
+
+	// EVENT BINDINGS
+	$(".ev-content").mouseenter(function(){
+		// console.log($(this).find(".ev-description").html());
+		// $(this).find(".ev-description").html();
+		$("#selectedDateMarker").css("display","block");
+
+		let eventObj = $(this).parent().parent().parent()
+		let newLeft = parseFloat(eventObj.css("left")) - 18;
+		$("#selectedDateMarker").css("left",newLeft);
+
+		var dateValue = new Date(parseInt(eventObj.attr("data-start")));
+		$("#selectedDateMarker").html(dateValue.getFullYear());
+
+		eventObj.find(".ev-timeIndicatorPin").addClass("ev-pinSelected");
+	});
+
+	$(".ev-content").mouseleave(function(){
+		let eventObj = $(this).parent().parent().parent()
+		$("#selectedDateMarker").css("display","none");
+		eventObj.find(".ev-timeIndicatorPin").removeClass("ev-pinSelected");
+
+	});
+
+
 
 }
 
@@ -162,7 +188,7 @@ function repositionEventsVertically() {
 function updateTimelineFixedMarkers() {
 
 	// REMOVE CURRENT MARKERS
-	$("#timelineLine").children().fadeOut(animSpeed * 0.5, function () {
+	$("#timelineLine").children(".timeLineFixedDate").fadeOut(animSpeed * 0.5, function () {
 		$(this).remove();
 	});
 

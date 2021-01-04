@@ -25,7 +25,6 @@
 	--colorGray: rgb(77, 77, 77);
 	--colorLight: rgb(239, 225, 216);
 	--colorLightTrans: rgb(239, 225, 216, 0.8);
-
 }
 
 body {
@@ -89,6 +88,15 @@ a {
 	transform: translateY(-25px) translateX(-2px);
 }
 
+#selectedDateMarker {
+	/* border: 1px solid var(--colorGreenStrong); */
+	/* border-width: 0 0 0 3px; */
+	/* height: 5px; */
+	position: absolute;
+	bottom: 5px;
+	color: var(--colorGreenStrong);
+}
+
 .timeEvent {
 	position: absolute;
 	display: inline;
@@ -130,6 +138,11 @@ a {
 	left: -3px;
 	top: -5px;
 	transform: rotate(45deg);
+}
+
+.ev-pinSelected{
+	background-color: var(--colorGreenStrong);
+
 }
 
 .ev-rangeIndicator {
