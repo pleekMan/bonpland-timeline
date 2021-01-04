@@ -24,6 +24,8 @@
 	--colorBlack: rgb(40, 40, 40);
 	--colorGray: rgb(77, 77, 77);
 	--colorLight: rgb(239, 225, 216);
+	--colorLightTrans: rgb(239, 225, 216, 0.8);
+
 }
 
 body {
@@ -98,6 +100,8 @@ a {
 
 .ev-container {
 	margin-left: 5px;
+	position: relative;
+	background-color: var(--colorLightTrans);
 }
 
 .ev-timeIndicator {
@@ -111,7 +115,9 @@ a {
 	border-width: 0 0 0 1px;
 }
 
-.ev-timeIndicatorStart {}
+.ev-timeIndicatorStart {
+	height: 30px;
+}
 
 .ev-timeIndicatorEnd {}
 
@@ -141,9 +147,9 @@ a {
 
 .ev-description {
 	color: var(--colorGray);
-	width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
+	width: 150px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 #displayContainer {

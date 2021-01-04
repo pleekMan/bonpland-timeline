@@ -99,6 +99,9 @@ function buildEvents(eventData) {
 		var sizeInTimeline = timelineWidth * (getEventEndNormalized(newEvent) - getEventStartNormalized(newEvent));
 		setEventSize(newEvent, sizeInTimeline);
 
+		newEvent.find(".ev-container").css("top","0px");
+		newEvent.css("z-index", -i);
+
 		newEvents.push(newEvent[0]); // GET THE DOM OBJECT WRAPPED BY THE JQUERY OBJECT
 	}
 
@@ -109,6 +112,50 @@ function buildEvents(eventData) {
 	// REMOVE MODEL
 	eventModelElement.remove();
 	// eventModelElement.css("display", "none");
+
+	repositionEventsVertically();
+
+}
+
+function repositionEventsVertically() {
+
+	let horizontalMaxDist = 150; // SAME AS .ev-description{width}
+	let verticalDisplace = 25;
+
+	let evs = getTimeEventsFromDOM();
+	let savedTops = [];
+	savedTops.push(0); // to be able to animate them altogether after the main loop
+
+	for (let i = 1; i < evs.length; i++) {
+
+		let thisEv = evs.eq(i);
+		let prevEv = evs.eq(i-1);
+		let thisEvLeft = parseFloat(thisEv.css("left"));
+		let prevEvLeft = parseFloat(prevEv.css("left"))
+		let interPillDistance = Math.abs( thisEvLeft - prevEvLeft);
+			
+		if (interPillDistance < horizontalMaxDist) {
+			// let newTop = parseFloat(prevEv.find(".ev-container").css("top")) + verticalDisplace;
+			let newTop = savedTops[i-1] + verticalDisplace;
+			savedTops.push(newTop);
+			// thisEv.find(".ev-container").css("top", newTop);
+		} else {
+			savedTops.push(0);
+		}
+
+	}
+
+	// animate
+	for (let i = 1; i < evs.length; i++) {
+
+		evs.eq(i).find(".ev-container").delay(500).animate({
+			top: savedTops[i]
+		}, animSpeed);
+		
+		evs.eq(i).find(".ev-timeIndicatorStart").delay(500).animate({
+			height: savedTops[i] + 30
+		}, animSpeed);
+	}
 
 }
 
@@ -190,6 +237,7 @@ function setEventPosition(event, pos) {
 	event.animate({
 		left: pos
 	}, animSpeed);
+
 }
 
 function setEventSize(event, siz) {
@@ -238,6 +286,9 @@ function zoomTo(zoomValue) {
 	// NEW SCROLL POSITION IN NEW TIMELINE WIDTH
 	var newScrollPos = (currentScrollPosNorm * timelineWidth) - ($(window).width() * 0.5);
 	scrollToLeft(newScrollPos);
+
+	setTimeout(repositionEventsVertically, animSpeed);
+
 
 }
 
