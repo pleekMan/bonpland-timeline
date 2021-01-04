@@ -1,8 +1,6 @@
 
 // START THE SERVER => RUN: python3 -m http.server (adding a number at the end selects the port (default: 8000) )
 
-console.log("--- CONTROLLER LOADED");
-
 // const parseCsv = require('csv-parse/lib/sync.js');
 //const parseCsv = require('csv');
 
@@ -43,7 +41,7 @@ function getDatabaseRaw() {
 		}
 	}
 
-	xhttp.open("GET", "../db/events-db.tsv", true);
+	xhttp.open("GET", "../db/histoire-1.tsv", true);
 	xhttp.send();
 }
 
@@ -76,6 +74,8 @@ function setup(eventData) {
 
 		eventObj.find(".ev-timeIndicatorPin").addClass("ev-pinSelected");
 		eventObj.find(".ev-timeIndicator").addClass("ev-pinSelected");
+		eventObj.find(".ev-rangeIndicator").addClass("ev-pinSelected");
+
 
 		// eventObj.find(".ev-description").css("overflow", "visible");
 
@@ -86,6 +86,8 @@ function setup(eventData) {
 		$("#selectedDateMarker").css("display","none");
 		eventObj.find(".ev-timeIndicatorPin").removeClass("ev-pinSelected");
 		eventObj.find(".ev-timeIndicator").removeClass("ev-pinSelected");
+		eventObj.find(".ev-rangeIndicator").removeClass("ev-pinSelected");
+
 
 		// eventObj.find(".ev-description").css("overflow", "hidden");
 

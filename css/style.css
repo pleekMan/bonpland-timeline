@@ -143,14 +143,15 @@ a {
 	transform: rotate(45deg);
 }
 
-.ev-pinSelected {
-	background-color: var(--colorGreenStrong);
-	border: 1px solid var(--colorGreenStrong);
-}
-
 .ev-rangeIndicator {
 	border: 1px solid white;
 	border-width: 1px 0 0 0;
+}
+
+
+.ev-pinSelected {
+	background-color: var(--colorGreenStrong);
+	border: 1px solid var(--colorGreenStrong);
 }
 
 .ev-content {}
@@ -173,7 +174,7 @@ a {
 
 .ev-description:hover {
 	overflow: visible;
-	width: auto;
+	width: fit-content;
 	background-color: var(--colorGreenLight);
 	cursor: pointer;
 }

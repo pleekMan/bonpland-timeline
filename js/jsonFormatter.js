@@ -18,16 +18,20 @@ function parseDB(database) {
 		startDate.setFullYear(startDateFormatted[2]);
 		startDate.setMonth(startDateFormatted[1]);
 		startDate.setDate(startDateFormatted[0]);
-		startDate.setTime
+		// startDate.setTime
 		// console.log(startDate);
 
 		// IF IT HAS AN END DATE
-		if (eventFields[3] != "") {
-			var endDateFormatted = formatDate(eventFields[3]);
-			endDate.setFullYear(endDateFormatted[2]);
-			endDate.setMonth(endDateFormatted[1]);
-			endDate.setDate(endDateFormatted[0]);
-			// console.log(endDate);
+		if (eventFields[3] != undefined) {
+			if (eventFields[3] != "") {
+				var endDateFormatted = formatDate(eventFields[3]);
+				endDate.setFullYear(endDateFormatted[2]);
+				endDate.setMonth(endDateFormatted[1]);
+				endDate.setDate(endDateFormatted[0]);
+				// console.log(endDate);
+			} else {
+				endDate = startDate;
+			}
 		} else {
 			endDate = startDate;
 		}
